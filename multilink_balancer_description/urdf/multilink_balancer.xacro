@@ -163,7 +163,7 @@
       </inertial>
   </link>
 
-  <joint name="joint4" type="continuous">
+  <joint name="joint3" type="continuous">
     <parent link="link3"/>
     <child link="link4"/>
     <origin xyz="0 ${width} ${height3 - axel_offset*2}" rpy="0 0 0"/>
@@ -198,7 +198,7 @@
       </inertial>
   </link>
 
-  <joint name="joint5" type="continuous">
+  <joint name="joint4" type="continuous">
     <parent link="link3"/>
     <child link="link5"/>
     <origin xyz="0 ${-width} ${height3 - axel_offset*2}" rpy="0 0 0"/>

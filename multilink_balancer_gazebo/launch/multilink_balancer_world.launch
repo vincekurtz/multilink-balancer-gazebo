@@ -27,7 +27,7 @@
 
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-      args="-urdf -model multilink_balancer -param robot_description -J joint1 0.35 -J joint2 -0.55 -J joint3 0.2 -J joint4 0.4"/>  <!-- set joint1 and joint2 angles in radians -->
+      args="-urdf -model multilink_balancer -param robot_description -J joint1 0.35 -J joint2 -0.55 -J joint3 0.2 -J joint4 0.4"/>  <!-- set joint angles in radians -->
 
   <!-- ros_control multilink_balancer launch file -->
   <include file="$(find multilink_balancer_control)/launch/multilink_balancer_control.launch" />
