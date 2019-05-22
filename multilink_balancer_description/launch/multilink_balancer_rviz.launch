@@ -1,0 +1,19 @@
+<launch>
+  <param name="robot_description"
+    command="$(find xacro)/xacro --inorder '$(find multilink_balancer_description)/urdf/multilink_balancer.xacro'" />
+
+  <!-- send fake joint values -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="TRUE"/>
+  </node>
+
+  <!-- Combine joint values -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
+
+  <!-- Publish transform between foot and world frame -->
+  <node pkg="tf" type="static_transform_publisher" name="world_transfoorm" args="0 0 0 0 0 0  /foot /world  100"/>
+
+  <!-- Show in Rviz   -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find multilink_balancer_description)/launch/multilink_balancer.rviz"/>
+
+</launch>

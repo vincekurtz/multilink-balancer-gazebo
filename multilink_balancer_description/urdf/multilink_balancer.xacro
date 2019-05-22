@@ -1,0 +1,259 @@
+<?xml version="1.0"?>
+<!-- Balancing Double Pendulum -->
+<robot name="multilink_balancer" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Constants for robot dimensions -->
+  <xacro:property name="PI" value="3.1415926535897931"/>
+  <xacro:property name="mass" value="1.0" /> <!-- arbitrary value for mass -->
+  <xacro:property name="width" value="0.1" /> <!-- Square dimensions (widthxwidth) of beams -->
+  <xacro:property name="height1" value="0.2" /> <!-- Link 1 -->
+  <xacro:property name="height2" value="1.1" /> <!-- Link 2 -->
+  <xacro:property name="height3" value="1.1" /> <!-- Link 3 -->
+  <xacro:property name="height4" value="1.1" /> <!-- Link 4 -->
+  <xacro:property name="height5" value="1.1" /> <!-- Link 5 -->
+  
+  <xacro:property name="foot_height" value="0.05" /> <!-- Foot dimensions -->
+  <xacro:property name="foot_width" value="1.0" /> 
+  <xacro:property name="foot_mass" value="0.2" /> <!-- negligible mass for the foot -->
+
+
+  <xacro:property name="axel_offset" value="0.05" /> <!-- How far keep joints away from each other -->
+
+  <!-- Import all Gazebo-customization elements, including Gazebo colors -->
+  <xacro:include filename="$(find multilink_balancer_description)/urdf/multilink_balancer.gazebo" />
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find multilink_balancer_description)/urdf/materials.xacro" />
+
+  <!-- Used for fixing robot foot to the world -->
+  <link name="world"/>
+
+  <joint name="fixed" type="fixed">
+    <parent link="world"/>
+    <child link="foot"/>
+  </joint>
+
+  <!-- Foot Link-->
+  <link name="foot">
+    <collision>
+      <origin xyz="0 0 ${foot_height/2}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${foot_width} ${foot_width} ${foot_height}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 ${foot_height/2}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${foot_width} ${foot_width} ${foot_height}"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 ${foot_height/2}" rpy="0 0 0"/>
+      <mass value="${foot_mass}"/>
+    <inertia
+        ixx="${foot_mass / 12.0 * (foot_width*foot_width + foot_height*foot_height)}" ixy="0.0" ixz="0.0"
+        iyy="${foot_mass / 12.0 * (foot_height*foot_height + foot_width*foot_width)}" iyz="0.0"
+        izz="${foot_mass / 12.0 * (foot_width*foot_width + foot_width*foot_width)}"/>
+    </inertial>
+  </link>
+
+  <joint name="foot_joint" type="fixed">
+    <parent link="foot"/>
+    <child link="link1"/>
+    <origin xyz="0 -${width} ${foot_height}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+  
+  <!-- Knob on foot Link -->
+  <link name="link1">
+    <collision>
+      <origin xyz="0 0 ${height1/2}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${width} ${width} ${height1}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 ${height1/2}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${width} ${width} ${height1}"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 ${height1/2}" rpy="0 0 0"/>
+      <mass value="${foot_mass}"/>
+    <inertia
+        ixx="${foot_mass / 12.0 * (width*width + height1*height1)}" ixy="0.0" ixz="0.0"
+        iyy="${foot_mass / 12.0 * (height1*height1 + width*width)}" iyz="0.0"
+        izz="${foot_mass / 12.0 * (width*width + width*width)}"/>
+    </inertial>
+  </link>
+
+  <joint name="joint1" type="continuous">
+    <parent link="link1"/>
+    <child link="link2"/>
+    <origin xyz="0 ${width} ${height1 - axel_offset}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <!-- Bottom Link -->
+  <link name="link2">
+    <collision>
+      <origin xyz="0 0 ${height2/2 - axel_offset}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${width} ${width} ${height2+axel_offset}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 ${height2/2 - axel_offset}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${width} ${width} ${height2}"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 ${height2/2 - axel_offset}" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <inertia
+          ixx="${mass / 12.0 * (width*width + height2*height2)}" ixy="0.0" ixz="0.0"
+          iyy="${mass / 12.0 * (height2*height2 + width*width)}" iyz="0.0"
+          izz="${mass / 12.0 * (width*width + width*width)}"/>
+      </inertial>
+  </link>
+
+  <joint name="joint2" type="continuous">
+    <parent link="link2"/>
+    <child link="link3"/>
+    <origin xyz="0 ${-width} ${height2 - axel_offset*2}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <!-- Middle Link -->
+  <link name="link3">
+    <collision>
+      <origin xyz="0 0 ${height3/2 - axel_offset}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${width} ${width} ${height3}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 ${height3/2 - axel_offset}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${width} ${width} ${height3}"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 ${height3/2 - axel_offset}" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <inertia
+          ixx="${mass / 12.0 * (width*width + height3*height3)}" ixy="0.0" ixz="0.0"
+          iyy="${mass / 12.0 * (height3*height3 + width*width)}" iyz="0.0"
+          izz="${mass / 12.0 * (width*width + width*width)}"/>
+      </inertial>
+  </link>
+
+  <joint name="joint4" type="continuous">
+    <parent link="link3"/>
+    <child link="link4"/>
+    <origin xyz="0 ${width} ${height3 - axel_offset*2}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <!-- First Top Link -->
+  <link name="link4">
+    <collision>
+      <origin xyz="0 0 ${height4/2 - axel_offset}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${width} ${width} ${height4}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 ${height4/2 - axel_offset}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${width} ${width} ${height4}"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 ${height4/2 - axel_offset}" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <inertia
+          ixx="${mass / 12.0 * (width*width + height4*height4)}" ixy="0.0" ixz="0.0"
+          iyy="${mass / 12.0 * (height4*height4 + width*width)}" iyz="0.0"
+          izz="${mass / 12.0 * (width*width + width*width)}"/>
+      </inertial>
+  </link>
+
+  <joint name="joint5" type="continuous">
+    <parent link="link3"/>
+    <child link="link5"/>
+    <origin xyz="0 ${-width} ${height3 - axel_offset*2}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.7"/>
+  </joint>
+
+  <!-- Second Top Link -->
+  <link name="link5">
+    <collision>
+      <origin xyz="0 0 ${height5/2 - axel_offset}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${width} ${width} ${height5}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 ${height5/2 - axel_offset}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${width} ${width} ${height5}"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 ${height5/2 - axel_offset}" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <inertia
+          ixx="${mass / 12.0 * (width*width + height5*height5)}" ixy="0.0" ixz="0.0"
+          iyy="${mass / 12.0 * (height5*height5 + width*width)}" iyz="0.0"
+          izz="${mass / 12.0 * (width*width + width*width)}"/>
+      </inertial>
+  </link>
+
+  <!-- Motors so we can actuate the joints -->
+  <transmission name="tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint1">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint2">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor2">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+</robot>
