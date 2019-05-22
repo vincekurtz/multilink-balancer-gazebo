@@ -6,8 +6,10 @@
     <!-- load the torque controllers -->
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
         output="screen" ns="/multilink_balancer" args="joint_state_controller
-        joint1_torque_controller
-        joint2_torque_controller"/>
+                                                       joint1_torque_controller
+                                                       joint2_torque_controller
+                                                       joint3_torque_controller
+                                                       joint4_torque_controller"/>
     
     <!-- load the position controllers -->
     <!--
