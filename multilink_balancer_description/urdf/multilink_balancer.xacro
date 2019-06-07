@@ -14,8 +14,9 @@
   
   <xacro:property name="foot_height" value="0.05" /> <!-- Foot dimensions -->
   <xacro:property name="foot_width" value="1.0" /> 
-  <xacro:property name="foot_mass" value="0.2" /> <!-- negligible mass for the foot -->
+  <xacro:property name="foot_mass" value="1.0" /> <!-- negligible mass for the foot -->
 
+  <xacro:property name="damping" value="0.0" /> 
 
   <xacro:property name="axel_offset" value="0.05" /> <!-- How far keep joints away from each other -->
 
@@ -25,12 +26,12 @@
   <xacro:include filename="$(find multilink_balancer_description)/urdf/materials.xacro" />
 
   <!-- Used for fixing robot foot to the world -->
+  <!--
   <link name="world"/>
-
   <joint name="fixed" type="fixed">
     <parent link="world"/>
     <child link="foot"/>
-  </joint>
+  </joint>-->
 
   <!-- Foot Link-->
   <link name="foot">
@@ -98,7 +99,7 @@
     <child link="link2"/>
     <origin xyz="0 ${width} ${height1 - axel_offset}" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <dynamics damping="0.7"/>
+    <dynamics damping="${damping}"/>
   </joint>
 
   <!-- Bottom Link -->
@@ -122,10 +123,10 @@
       <origin xyz="0 0 ${height2/2 - axel_offset}" rpy="0 0 0"/>
       <mass value="${mass}"/>
       <inertia
-          ixx="${mass / 12.0 * (width*width + height2*height2)}" ixy="0.0" ixz="0.0"
-          iyy="${mass / 12.0 * (height2*height2 + width*width)}" iyz="0.0"
-          izz="${mass / 12.0 * (width*width + width*width)}"/>
-      </inertial>
+          ixx="0.0846" ixy="0.0" ixz="0.0"
+          iyy="0.0846" iyz="0.0"
+          izz="0.0025"/>
+    </inertial>
   </link>
 
   <joint name="joint2" type="continuous">
@@ -133,7 +134,7 @@
     <child link="link3"/>
     <origin xyz="0 ${-width} ${height2 - axel_offset*2}" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <dynamics damping="0.7"/>
+    <dynamics damping="${damping}"/>
   </joint>
 
   <!-- Middle Link -->
@@ -157,10 +158,10 @@
       <origin xyz="0 0 ${height3/2 - axel_offset}" rpy="0 0 0"/>
       <mass value="${mass}"/>
       <inertia
-          ixx="${mass / 12.0 * (width*width + height3*height3)}" ixy="0.0" ixz="0.0"
-          iyy="${mass / 12.0 * (height3*height3 + width*width)}" iyz="0.0"
-          izz="${mass / 12.0 * (width*width + width*width)}"/>
-      </inertial>
+          ixx="0.0846" ixy="0.0" ixz="0.0"
+          iyy="0.0846" iyz="0.0"
+          izz="0.0025"/>
+    </inertial>
   </link>
 
   <joint name="joint3" type="continuous">
@@ -168,7 +169,7 @@
     <child link="link4"/>
     <origin xyz="0 ${width} ${height3 - axel_offset*2}" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <dynamics damping="0.7"/>
+    <dynamics damping="${damping}"/>
   </joint>
 
   <!-- First Top Link -->
@@ -192,10 +193,10 @@
       <origin xyz="0 0 ${height4/2 - axel_offset}" rpy="0 0 0"/>
       <mass value="${mass}"/>
       <inertia
-          ixx="${mass / 12.0 * (width*width + height4*height4)}" ixy="0.0" ixz="0.0"
-          iyy="${mass / 12.0 * (height4*height4 + width*width)}" iyz="0.0"
-          izz="${mass / 12.0 * (width*width + width*width)}"/>
-      </inertial>
+          ixx="0.0846" ixy="0.0" ixz="0.0"
+          iyy="0.0846" iyz="0.0"
+          izz="0.0025"/>
+    </inertial>
   </link>
 
   <joint name="joint4" type="continuous">
@@ -203,7 +204,7 @@
     <child link="link5"/>
     <origin xyz="0 ${-width} ${height3 - axel_offset*2}" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <dynamics damping="0.7"/>
+    <dynamics damping="${damping}"/>
   </joint>
 
   <!-- Second Top Link -->
@@ -227,10 +228,10 @@
       <origin xyz="0 0 ${height5/2 - axel_offset}" rpy="0 0 0"/>
       <mass value="${mass}"/>
       <inertia
-          ixx="${mass / 12.0 * (width*width + height5*height5)}" ixy="0.0" ixz="0.0"
-          iyy="${mass / 12.0 * (height5*height5 + width*width)}" iyz="0.0"
-          izz="${mass / 12.0 * (width*width + width*width)}"/>
-      </inertial>
+          ixx="0.0846" ixy="0.0" ixz="0.0"
+          iyy="0.0846" iyz="0.0"
+          izz="0.0025"/>
+    </inertial>
   </link>
 
   <!-- Motors so we can actuate the joints -->
