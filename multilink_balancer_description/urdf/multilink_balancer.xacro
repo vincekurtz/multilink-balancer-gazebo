@@ -9,7 +9,7 @@
   <xacro:property name="height1" value="0.2" /> <!-- Link 1 -->
   <xacro:property name="height2" value="1.1" /> <!-- Link 2 -->
   <xacro:property name="height3" value="1.1" /> <!-- Link 3 -->
-  <xacro:property name="height4" value="1.1" /> <!-- Link 4 -->
+  <xacro:property name="height4" value="2.1" /> <!-- Link 4 -->
   <xacro:property name="height5" value="1.1" /> <!-- Link 5 -->
   
   <xacro:property name="foot_height" value="0.05" /> <!-- Foot dimensions -->
@@ -172,7 +172,7 @@
     <dynamics damping="${damping}"/>
   </joint>
 
-  <!-- First Top Link -->
+  <!-- Torso Link -->
   <link name="link4">
     <collision>
       <origin xyz="0 0 ${height4/2 - axel_offset}" rpy="0 0 0"/>
@@ -191,7 +191,7 @@
 
     <inertial>
       <origin xyz="0 0 ${height4/2 - axel_offset}" rpy="0 0 0"/>
-      <mass value="${mass}"/>
+      <mass value="${2*mass}"/>
       <inertia
           ixx="0.0846" ixy="0.0" ixz="0.0"
           iyy="0.0846" iyz="0.0"
@@ -200,14 +200,14 @@
   </link>
 
   <joint name="joint4" type="continuous">
-    <parent link="link3"/>
+    <parent link="link4"/>
     <child link="link5"/>
     <origin xyz="0 ${-width} ${height3 - axel_offset*2}" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
     <dynamics damping="${damping}"/>
   </joint>
 
-  <!-- Second Top Link -->
+  <!-- Arm Link -->
   <link name="link5">
     <collision>
       <origin xyz="0 0 ${height5/2 - axel_offset}" rpy="0 0 0"/>
