@@ -13,8 +13,8 @@
   <!-- Foot -->
   <gazebo reference="foot">
     <selfCollide>true</selfCollide>
-    <mu1>0.2</mu1>  <!-- Friction coefficients -->
-    <mu2>0.2</mu2>
+    <mu1>0.3</mu1>  <!-- Friction coefficients -->
+    <mu2>0.3</mu2>
     <material>Gazebo/FlatBlack</material>
   </gazebo>
 
