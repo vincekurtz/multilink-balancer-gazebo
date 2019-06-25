@@ -14,9 +14,9 @@
   
   <xacro:property name="foot_height" value="0.05" /> <!-- Foot dimensions -->
   <xacro:property name="foot_width" value="1.0" /> 
-  <xacro:property name="foot_mass" value="1.0" /> <!-- negligible mass for the foot -->
+  <xacro:property name="foot_mass" value="10.0" />
 
-  <xacro:property name="damping" value="0.1" /> 
+  <xacro:property name="damping" value="0.0" /> 
 
   <xacro:property name="axel_offset" value="0.05" /> <!-- How far keep joints away from each other -->
 
